@@ -1,21 +1,20 @@
-document.getElementById("loginForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Mencegah halaman refresh
-    login();
-});
+import { auth } from "./firebase-config.js"; // Import dari firebase-config.js
+import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
-function login() {
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const email = `${username}@custom.com`; // Format email dari username
-
-    firebase.auth().signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            console.log("Login berhasil:", userCredential.user);
-            window.location.href = "dashboard.html"; // Redirect ke dashboard
-        })
-        .catch((error) => {
-            console.error("Login gagal:", error.message);
-            document.getElementById("loginMessage").innerText = "Login gagal: " + error.message;
-            document.getElementById("loginMessage").style.color = "red"; // Warnai error agar terlihat
-        });
+// Contoh fungsi login
+function loginUser(email, password) {
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      console.log("Login berhasil:", userCredential.user);
+    })
+    .catch((error) => {
+      console.error("Login gagal:", error.message);
+    });
 }
+
+// Panggil fungsi login ketika tombol diklik
+document.getElementById("login-btn").addEventListener("click", () => {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  loginUser(email, password);
+});
